@@ -1,0 +1,682 @@
+basePath: /api/v1/vet
+definitions:
+  models.CatHistoryResponse:
+    properties:
+      cat_age:
+        type: integer
+      cat_breed:
+        type: string
+      cat_name:
+        type: string
+      cat_visits:
+        items:
+          $ref: '#/definitions/models.VisitHistoryResponse'
+        type: array
+      cat_weight:
+        type: integer
+      id:
+        type: integer
+    type: object
+  models.CatRequest:
+    properties:
+      cat_age:
+        type: integer
+      cat_breed:
+        type: string
+      cat_name:
+        type: string
+      cat_weight:
+        type: integer
+    type: object
+  models.CatResponse:
+    properties:
+      cat_age:
+        type: integer
+      cat_breed:
+        type: string
+      cat_name:
+        type: string
+      cat_weight:
+        type: integer
+      id:
+        type: integer
+    type: object
+  models.TreatmentHistoryResponse:
+    properties:
+      id:
+        type: integer
+      treatment_name:
+        type: string
+    type: object
+  models.TreatmentRequest:
+    properties:
+      treatment_name:
+        type: string
+      treatment_visit_id:
+        type: integer
+    type: object
+  models.TreatmentResponse:
+    properties:
+      id:
+        type: integer
+      treatment_name:
+        type: string
+      treatment_visit_id:
+        type: integer
+    type: object
+  models.VisitHistoryResponse:
+    properties:
+      id:
+        type: integer
+      visit_date:
+        type: string
+      visit_reason:
+        type: string
+      visit_treatments:
+        items:
+          $ref: '#/definitions/models.TreatmentHistoryResponse'
+        type: array
+      visit_vet:
+        type: string
+    type: object
+  models.VisitRequest:
+    properties:
+      visit_cat_id:
+        type: integer
+      visit_date:
+        type: string
+      visit_reason:
+        type: string
+      visit_vet:
+        type: string
+    type: object
+  models.VisitResponse:
+    properties:
+      id:
+        type: integer
+      visit_cat_id:
+        type: integer
+      visit_date:
+        type: string
+      visit_reason:
+        type: string
+      visit_treatments:
+        items:
+          $ref: '#/definitions/models.TreatmentResponse'
+        type: array
+      visit_vet:
+        type: string
+    type: object
+host: localhost:8081
+info:
+  contact: {}
+  description: Description de mon API
+  title: Mon API
+  version: "1.0"
+paths:
+  /cats:
+    get:
+      description: Find all the cats in the database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.CatResponse'
+            type: array
+        "500":
+          description: Invalid to retrieve cats
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get all Cats
+      tags:
+      - cats
+    post:
+      consumes:
+      - application/json
+      description: Creates a new cat entry in the database
+      parameters:
+      - description: Cat creation payload
+        in: body
+        name: cat
+        required: true
+        schema:
+          $ref: '#/definitions/models.CatRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.CatResponse'
+        "400":
+          description: Invalid Cat Post request payload
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Failed to Create specific Cat
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create a new Cat
+      tags:
+      - cats
+  /cats/{id}:
+    delete:
+      description: Deletes a cat from the database by its ID
+      parameters:
+      - description: Cat ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Cat deleted successfully
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Cat not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Failed to delete cat
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Delete a cat
+      tags:
+      - cats
+    get:
+      description: Retrieves a specific cat from the database by its ID
+      parameters:
+      - description: Cat ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.CatResponse'
+        "404":
+          description: Cat not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Failed to find specific cat
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get cat by ID
+      tags:
+      - cats
+    put:
+      consumes:
+      - application/json
+      description: Updates an existing cat's information in the database
+      parameters:
+      - description: Cat ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Cat update payload
+        in: body
+        name: cat
+        required: true
+        schema:
+          $ref: '#/definitions/models.CatRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.CatResponse'
+        "400":
+          description: Invalid request payload
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Cat not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Failed to update cat
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Update a cat
+      tags:
+      - cats
+  /cats/{id}/history:
+    get:
+      description: Retrieves the complete medical history of a cat including visits
+        and treatments
+      parameters:
+      - description: Cat ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.CatHistoryResponse'
+        "404":
+          description: Cat not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Failed to find cat history
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get cat history
+      tags:
+      - cats
+  /treatments:
+    get:
+      description: Retrieves a list of all treatments from the database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.TreatmentResponse'
+            type: array
+        "500":
+          description: Failed to retrieve treatments
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get all treatments
+      tags:
+      - treatments
+    post:
+      consumes:
+      - application/json
+      description: Creates a new treatment entry in the database
+      parameters:
+      - description: Treatment creation payload
+        in: body
+        name: treatment
+        required: true
+        schema:
+          $ref: '#/definitions/models.TreatmentRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.TreatmentResponse'
+        "400":
+          description: Invalid request payload
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Failed to create treatment
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create a new treatment
+      tags:
+      - treatments
+  /treatments/{id}:
+    delete:
+      description: Deletes a treatment from the database by its ID
+      parameters:
+      - description: Treatment ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Treatment deleted successfully
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Treatment not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Failed to delete treatment
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Delete a treatment
+      tags:
+      - treatments
+    get:
+      description: Retrieves a specific treatment from the database by its ID
+      parameters:
+      - description: Treatment ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.TreatmentResponse'
+        "404":
+          description: Treatment not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Failed to find specific treatment
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get treatment by ID
+      tags:
+      - treatments
+    put:
+      consumes:
+      - application/json
+      description: Updates an existing treatment's information in the database
+      parameters:
+      - description: Treatment ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Treatment update payload
+        in: body
+        name: treatment
+        required: true
+        schema:
+          $ref: '#/definitions/models.TreatmentRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.TreatmentResponse'
+        "400":
+          description: Invalid request payload
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Treatment not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Failed to update treatment
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Update a treatment
+      tags:
+      - treatments
+  /treatments/{id}/history:
+    get:
+      description: Retrieves all treatments associated with a specific visit
+      parameters:
+      - description: Visit ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.TreatmentHistoryResponse'
+            type: array
+        "404":
+          description: Visit not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Failed to find treatments for visit
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get treatments by visit ID
+      tags:
+      - treatments
+  /visits:
+    get:
+      description: Retrieves a list of all visits from the database, optionally filtered
+        by vet, reason, or date
+      parameters:
+      - description: Filter by veterinarian name
+        in: query
+        name: vet
+        type: string
+      - description: Filter by visit reason
+        in: query
+        name: reason
+        type: string
+      - description: 'Filter by date (format: YYYY-MM-DD)'
+        in: query
+        name: date
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.VisitHistoryResponse'
+            type: array
+        "500":
+          description: Failed to retrieve visits
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get all visits with optional filters
+      tags:
+      - visits
+    post:
+      consumes:
+      - application/json
+      description: Creates a new visit entry in the database
+      parameters:
+      - description: Visit creation payload
+        in: body
+        name: visit
+        required: true
+        schema:
+          $ref: '#/definitions/models.VisitRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.VisitResponse'
+        "400":
+          description: Invalid request payload
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Failed to create visit
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create a new visit
+      tags:
+      - visits
+  /visits/{id}:
+    delete:
+      description: Deletes a visit from the database by its ID
+      parameters:
+      - description: Visit ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Visit deleted successfully
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Visit not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Failed to delete visit
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Delete a visit
+      tags:
+      - visits
+    get:
+      description: Retrieves a specific visit from the database by its ID, including
+        associated treatments
+      parameters:
+      - description: Visit ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.VisitHistoryResponse'
+        "404":
+          description: Visit not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Failed to find specific visit
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get visit by ID
+      tags:
+      - visits
+    put:
+      consumes:
+      - application/json
+      description: Updates an existing visit's information in the database
+      parameters:
+      - description: Visit ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Visit update payload
+        in: body
+        name: visit
+        required: true
+        schema:
+          $ref: '#/definitions/models.VisitRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.VisitResponse'
+        "400":
+          description: Invalid request payload
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Visit not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Failed to update visit
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Update a visit
+      tags:
+      - visits
+schemes:
+- http
+swagger: "2.0"
