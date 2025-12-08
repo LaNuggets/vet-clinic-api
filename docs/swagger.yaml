@@ -1,6 +1,6 @@
 basePath: /api/v1/vet
 definitions:
-  models.CatHistoryResponse:
+  model.CatHistoryResponse:
     properties:
       cat_age:
         type: integer
@@ -10,14 +10,14 @@ definitions:
         type: string
       cat_visits:
         items:
-          $ref: '#/definitions/models.VisitHistoryResponse'
+          $ref: '#/definitions/model.VisitHistoryResponse'
         type: array
       cat_weight:
         type: integer
       id:
         type: integer
     type: object
-  models.CatRequest:
+  model.CatRequest:
     properties:
       cat_age:
         type: integer
@@ -28,7 +28,7 @@ definitions:
       cat_weight:
         type: integer
     type: object
-  models.CatResponse:
+  model.CatResponse:
     properties:
       cat_age:
         type: integer
@@ -41,21 +41,21 @@ definitions:
       id:
         type: integer
     type: object
-  models.TreatmentHistoryResponse:
+  model.TreatmentHistoryResponse:
     properties:
       id:
         type: integer
       treatment_name:
         type: string
     type: object
-  models.TreatmentRequest:
+  model.TreatmentRequest:
     properties:
       treatment_name:
         type: string
       treatment_visit_id:
         type: integer
     type: object
-  models.TreatmentResponse:
+  model.TreatmentResponse:
     properties:
       id:
         type: integer
@@ -64,7 +64,7 @@ definitions:
       treatment_visit_id:
         type: integer
     type: object
-  models.VisitHistoryResponse:
+  model.VisitHistoryResponse:
     properties:
       id:
         type: integer
@@ -74,12 +74,12 @@ definitions:
         type: string
       visit_treatments:
         items:
-          $ref: '#/definitions/models.TreatmentHistoryResponse'
+          $ref: '#/definitions/model.TreatmentHistoryResponse'
         type: array
       visit_vet:
         type: string
     type: object
-  models.VisitRequest:
+  model.VisitRequest:
     properties:
       visit_cat_id:
         type: integer
@@ -90,7 +90,7 @@ definitions:
       visit_vet:
         type: string
     type: object
-  models.VisitResponse:
+  model.VisitResponse:
     properties:
       id:
         type: integer
@@ -102,7 +102,7 @@ definitions:
         type: string
       visit_treatments:
         items:
-          $ref: '#/definitions/models.TreatmentResponse'
+          $ref: '#/definitions/model.TreatmentResponse'
         type: array
       visit_vet:
         type: string
@@ -110,8 +110,9 @@ definitions:
 host: localhost:8081
 info:
   contact: {}
-  description: Description de mon API
-  title: Mon API
+  description: This is an API for managing a veterinary clinic. You can register cats,
+    consultations and treatments.
+  title: Veterinarian API
   version: "1.0"
 paths:
   /cats:
@@ -124,10 +125,10 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/models.CatResponse'
+              $ref: '#/definitions/model.CatResponse'
             type: array
         "500":
-          description: Invalid to retrieve cats
+          description: Failed to retrieve cats
           schema:
             additionalProperties:
               type: string
@@ -145,14 +146,14 @@ paths:
         name: cat
         required: true
         schema:
-          $ref: '#/definitions/models.CatRequest'
+          $ref: '#/definitions/model.CatRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.CatResponse'
+            $ref: '#/definitions/model.CatResponse'
         "400":
           description: Invalid Cat Post request payload
           schema:
@@ -215,7 +216,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.CatResponse'
+            $ref: '#/definitions/model.CatResponse'
         "404":
           description: Cat not found
           schema:
@@ -246,14 +247,14 @@ paths:
         name: cat
         required: true
         schema:
-          $ref: '#/definitions/models.CatRequest'
+          $ref: '#/definitions/model.CatRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.CatResponse'
+            $ref: '#/definitions/model.CatResponse'
         "400":
           description: Invalid request payload
           schema:
@@ -291,7 +292,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.CatHistoryResponse'
+            $ref: '#/definitions/model.CatHistoryResponse'
         "404":
           description: Cat not found
           schema:
@@ -317,7 +318,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/models.TreatmentResponse'
+              $ref: '#/definitions/model.TreatmentResponse'
             type: array
         "500":
           description: Failed to retrieve treatments
@@ -338,14 +339,14 @@ paths:
         name: treatment
         required: true
         schema:
-          $ref: '#/definitions/models.TreatmentRequest'
+          $ref: '#/definitions/model.TreatmentRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.TreatmentResponse'
+            $ref: '#/definitions/model.TreatmentResponse'
         "400":
           description: Invalid request payload
           schema:
@@ -408,7 +409,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.TreatmentResponse'
+            $ref: '#/definitions/model.TreatmentResponse'
         "404":
           description: Treatment not found
           schema:
@@ -439,14 +440,14 @@ paths:
         name: treatment
         required: true
         schema:
-          $ref: '#/definitions/models.TreatmentRequest'
+          $ref: '#/definitions/model.TreatmentRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.TreatmentResponse'
+            $ref: '#/definitions/model.TreatmentResponse'
         "400":
           description: Invalid request payload
           schema:
@@ -484,7 +485,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/models.TreatmentHistoryResponse'
+              $ref: '#/definitions/model.TreatmentHistoryResponse'
             type: array
         "404":
           description: Visit not found
@@ -525,7 +526,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/models.VisitHistoryResponse'
+              $ref: '#/definitions/model.VisitHistoryResponse'
             type: array
         "500":
           description: Failed to retrieve visits
@@ -546,14 +547,14 @@ paths:
         name: visit
         required: true
         schema:
-          $ref: '#/definitions/models.VisitRequest'
+          $ref: '#/definitions/model.VisitRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.VisitResponse'
+            $ref: '#/definitions/model.VisitResponse'
         "400":
           description: Invalid request payload
           schema:
@@ -617,7 +618,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.VisitHistoryResponse'
+            $ref: '#/definitions/model.VisitHistoryResponse'
         "404":
           description: Visit not found
           schema:
@@ -648,14 +649,14 @@ paths:
         name: visit
         required: true
         schema:
-          $ref: '#/definitions/models.VisitRequest'
+          $ref: '#/definitions/model.VisitRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.VisitResponse'
+            $ref: '#/definitions/model.VisitResponse'
         "400":
           description: Invalid request payload
           schema:

@@ -31,12 +31,12 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.CatResponse"
+                                "$ref": "#/definitions/model.CatResponse"
                             }
                         }
                     },
                     "500": {
-                        "description": "Invalid to retrieve cats",
+                        "description": "Failed to retrieve cats",
                         "schema": {
                             "type": "object",
                             "additionalProperties": {
@@ -65,7 +65,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.CatRequest"
+                            "$ref": "#/definitions/model.CatRequest"
                         }
                     }
                 ],
@@ -73,7 +73,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.CatResponse"
+                            "$ref": "#/definitions/model.CatResponse"
                         }
                     },
                     "400": {
@@ -120,7 +120,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.CatResponse"
+                            "$ref": "#/definitions/model.CatResponse"
                         }
                     },
                     "404": {
@@ -169,7 +169,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.CatRequest"
+                            "$ref": "#/definitions/model.CatRequest"
                         }
                     }
                 ],
@@ -177,7 +177,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.CatResponse"
+                            "$ref": "#/definitions/model.CatResponse"
                         }
                     },
                     "400": {
@@ -281,7 +281,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.CatHistoryResponse"
+                            "$ref": "#/definitions/model.CatHistoryResponse"
                         }
                     },
                     "404": {
@@ -321,7 +321,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.TreatmentResponse"
+                                "$ref": "#/definitions/model.TreatmentResponse"
                             }
                         }
                     },
@@ -355,7 +355,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.TreatmentRequest"
+                            "$ref": "#/definitions/model.TreatmentRequest"
                         }
                     }
                 ],
@@ -363,7 +363,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.TreatmentResponse"
+                            "$ref": "#/definitions/model.TreatmentResponse"
                         }
                     },
                     "400": {
@@ -410,7 +410,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.TreatmentResponse"
+                            "$ref": "#/definitions/model.TreatmentResponse"
                         }
                     },
                     "404": {
@@ -459,7 +459,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.TreatmentRequest"
+                            "$ref": "#/definitions/model.TreatmentRequest"
                         }
                     }
                 ],
@@ -467,7 +467,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.TreatmentResponse"
+                            "$ref": "#/definitions/model.TreatmentResponse"
                         }
                     },
                     "400": {
@@ -573,7 +573,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.TreatmentHistoryResponse"
+                                "$ref": "#/definitions/model.TreatmentHistoryResponse"
                             }
                         }
                     },
@@ -634,7 +634,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.VisitHistoryResponse"
+                                "$ref": "#/definitions/model.VisitHistoryResponse"
                             }
                         }
                     },
@@ -668,7 +668,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.VisitRequest"
+                            "$ref": "#/definitions/model.VisitRequest"
                         }
                     }
                 ],
@@ -676,7 +676,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.VisitResponse"
+                            "$ref": "#/definitions/model.VisitResponse"
                         }
                     },
                     "400": {
@@ -723,7 +723,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.VisitHistoryResponse"
+                            "$ref": "#/definitions/model.VisitHistoryResponse"
                         }
                     },
                     "404": {
@@ -772,7 +772,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.VisitRequest"
+                            "$ref": "#/definitions/model.VisitRequest"
                         }
                     }
                 ],
@@ -780,7 +780,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.VisitResponse"
+                            "$ref": "#/definitions/model.VisitResponse"
                         }
                     },
                     "400": {
@@ -863,7 +863,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "models.CatHistoryResponse": {
+        "model.CatHistoryResponse": {
             "type": "object",
             "properties": {
                 "cat_age": {
@@ -878,7 +878,7 @@ const docTemplate = `{
                 "cat_visits": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/models.VisitHistoryResponse"
+                        "$ref": "#/definitions/model.VisitHistoryResponse"
                     }
                 },
                 "cat_weight": {
@@ -889,7 +889,7 @@ const docTemplate = `{
                 }
             }
         },
-        "models.CatRequest": {
+        "model.CatRequest": {
             "type": "object",
             "properties": {
                 "cat_age": {
@@ -906,7 +906,7 @@ const docTemplate = `{
                 }
             }
         },
-        "models.CatResponse": {
+        "model.CatResponse": {
             "type": "object",
             "properties": {
                 "cat_age": {
@@ -926,7 +926,7 @@ const docTemplate = `{
                 }
             }
         },
-        "models.TreatmentHistoryResponse": {
+        "model.TreatmentHistoryResponse": {
             "type": "object",
             "properties": {
                 "id": {
@@ -937,7 +937,7 @@ const docTemplate = `{
                 }
             }
         },
-        "models.TreatmentRequest": {
+        "model.TreatmentRequest": {
             "type": "object",
             "properties": {
                 "treatment_name": {
@@ -948,7 +948,7 @@ const docTemplate = `{
                 }
             }
         },
-        "models.TreatmentResponse": {
+        "model.TreatmentResponse": {
             "type": "object",
             "properties": {
                 "id": {
@@ -962,7 +962,7 @@ const docTemplate = `{
                 }
             }
         },
-        "models.VisitHistoryResponse": {
+        "model.VisitHistoryResponse": {
             "type": "object",
             "properties": {
                 "id": {
@@ -977,7 +977,7 @@ const docTemplate = `{
                 "visit_treatments": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/models.TreatmentHistoryResponse"
+                        "$ref": "#/definitions/model.TreatmentHistoryResponse"
                     }
                 },
                 "visit_vet": {
@@ -985,7 +985,7 @@ const docTemplate = `{
                 }
             }
         },
-        "models.VisitRequest": {
+        "model.VisitRequest": {
             "type": "object",
             "properties": {
                 "visit_cat_id": {
@@ -1002,7 +1002,7 @@ const docTemplate = `{
                 }
             }
         },
-        "models.VisitResponse": {
+        "model.VisitResponse": {
             "type": "object",
             "properties": {
                 "id": {
@@ -1020,7 +1020,7 @@ const docTemplate = `{
                 "visit_treatments": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/models.TreatmentResponse"
+                        "$ref": "#/definitions/model.TreatmentResponse"
                     }
                 },
                 "visit_vet": {
@@ -1037,8 +1037,8 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "localhost:8081",
 	BasePath:         "/api/v1/vet",
 	Schemes:          []string{"http"},
-	Title:            "Mon API",
-	Description:      "Description de mon API",
+	Title:            "Veterinarian API",
+	Description:      "This is an API for managing a veterinary clinic. You can register cats, consultations and treatments.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

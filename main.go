@@ -61,9 +61,9 @@ func Routes(configuration *config.Config) *chi.Mux {
 	return router
 }
 
-// @title           Mon API
+// @title           Veterinarian API
 // @version         1.0
-// @description     Description de mon API
+// @description    	This is an API for managing a veterinary clinic. You can register cats, consultations and treatments.
 // @host            localhost:8081
 // @BasePath        /api/v1/vet
 // @schemes         http
