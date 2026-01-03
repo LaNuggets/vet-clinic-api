@@ -29,3 +29,7 @@ type UserResponse struct {
 	Email    string `json:"user_email"`
 	Password string `json:"user_password"`
 }
+
+type TokenResponse struct {
+	Token string `json:"token"`
+}

@@ -14,6 +14,7 @@ type UserEntryRepository interface {
 	Create(entry *UserEntry) (*UserEntry, error)
 	FindAll() ([]*UserEntry, error)
 	FindById(id int) (*UserEntry, error)
+	FindByEmail(email string) (*UserEntry, error)
 	FindLastUserId(id int) bool
 	Update(id int, entry *UserEntry) (*UserEntry, error)
 	DeleteById(id int) error
@@ -62,6 +63,16 @@ func (r *userEntryRepository) FindLastUserId(id int) bool {
 	r.db.Model(&UserEntry{}).Where("id = ?", id).Count(&count)
 
 	return count > 0
+}
+
+func (r *userEntryRepository) FindByEmail(email string) (*UserEntry, error) {
+
+	var entries *UserEntry
+	if err := r.db.Where("email = ?", email).First(&entries).Error; err != nil {
+		return nil, err
+	}
+
+	return entries, nil
 }
 
 func (r *userEntryRepository) Update(id int, entry *UserEntry) (*UserEntry, error) {

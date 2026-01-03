@@ -1,6 +1,7 @@
 package config
 
 import (
+	"os"
 	"vet-clinic-api/database"
 	"vet-clinic-api/database/dbmodel"
 
@@ -9,6 +10,10 @@ import (
 )
 
 type Config struct {
+
+	// Token secret
+	JWTSecret string
+
 	// Repository connection
 	CatEntryRepository       dbmodel.CatEntryRepository
 	TreatmentEntryRepository dbmodel.TreatmentEntryRepository
@@ -25,6 +30,8 @@ func New() (*Config, error) {
 	if err != nil {
 		return &config, err
 	}
+
+	config.JWTSecret = os.Getenv("JWT_SECRET")
 
 	// Models migrate
 	database.Migrate(databaseSession)

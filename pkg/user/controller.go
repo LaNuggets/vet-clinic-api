@@ -6,10 +6,12 @@ import (
 	"strconv"
 	"vet-clinic-api/config"
 	"vet-clinic-api/database/dbmodel"
+	"vet-clinic-api/pkg/authentication"
 	"vet-clinic-api/pkg/model"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/render"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type UserConfig struct {
@@ -18,6 +20,50 @@ type UserConfig struct {
 
 func New(configuration *config.Config) *UserConfig {
 	return &UserConfig{configuration}
+}
+
+// LoginHandler godoc
+// @Summary      Authenticate a user and get JWT
+// @Description  Authenticates a user by email and password, returns a JWT token if credentials are valid.
+// @Tags         auth
+// @Accept       json
+// @Produce      json
+// @Param        login body model.UserRequest true "Login credentials"
+// @Success      200  {object}  model.TokenResponse
+// @Failure      400  {object}  map[string]string "Invalid JSON payload"
+// @Failure      401  {object}  map[string]string "Invalid email or password"
+// @Failure      500  {object}  map[string]string "Failed to generate token"
+// @Router       /users/login [post]
+func (config *UserConfig) LoginHandler(w http.ResponseWriter, r *http.Request) {
+
+	// Get the request
+	req := &model.UserRequest{}
+	if err := render.Bind(r, req); err != nil {
+		render.JSON(w, r, map[string]string{"error": "Invalid User Post request payload. " + err.Error()})
+		return
+	}
+
+	user, err := config.UserEntryRepository.FindByEmail(*req.Email)
+	if err != nil || user == nil {
+		render.JSON(w, r, map[string]string{"error": "No user found with email : " + *req.Email})
+		return
+	}
+
+	if bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(*req.Password)) != nil {
+		http.Error(w, "Invalid email or password", http.StatusUnauthorized)
+		return
+	}
+
+	token, err := authentication.GenerateToken(config.JWTSecret, user.Email)
+	if err != nil {
+		http.Error(w, "Failed to generate token", http.StatusInternalServerError)
+		return
+	}
+
+	// Set up token to specific response format for better readability
+	res := &model.TokenResponse{Token: token}
+
+	render.JSON(w, r, res)
 }
 
 // PostHandler godoc
@@ -40,8 +86,15 @@ func (config *UserConfig) PostHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Hash the user password for better security
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(*req.Password), bcrypt.DefaultCost)
+	if err != nil {
+		render.JSON(w, r, map[string]string{"error": "Failed to hash password"})
+		return
+	}
+
 	// Convert the requested data into dbmodel.UserEntry type for the "Create" function
-	userEntry := &dbmodel.UserEntry{Email: *req.Email, Password: *req.Password}
+	userEntry := &dbmodel.UserEntry{Email: *req.Email, Password: string(hashedPassword)}
 
 	// Request the DB to Create the informations
 	entries, err := config.UserEntryRepository.Create(userEntry)

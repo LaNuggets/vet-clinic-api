@@ -41,6 +41,11 @@ definitions:
       id:
         type: integer
     type: object
+  model.TokenResponse:
+    properties:
+      token:
+        type: string
+    type: object
   model.TreatmentHistoryResponse:
     properties:
       id:
@@ -679,6 +684,47 @@ paths:
       summary: Update a user
       tags:
       - users
+  /users/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticates a user by email and password, returns a JWT token
+        if credentials are valid.
+      parameters:
+      - description: Login credentials
+        in: body
+        name: login
+        required: true
+        schema:
+          $ref: '#/definitions/model.UserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.TokenResponse'
+        "400":
+          description: Invalid JSON payload
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Invalid email or password
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Failed to generate token
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Authenticate a user and get JWT
+      tags:
+      - auth
   /visits:
     get:
       description: Retrieves a list of all visits from the database, optionally filtered
