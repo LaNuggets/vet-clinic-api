@@ -13,6 +13,7 @@ type Config struct {
 	CatEntryRepository       dbmodel.CatEntryRepository
 	TreatmentEntryRepository dbmodel.TreatmentEntryRepository
 	VisitEntryRepository     dbmodel.VisitEntryRepository
+	UserEntryRepository      dbmodel.UserEntryRepository
 }
 
 func New() (*Config, error) {
@@ -32,6 +33,7 @@ func New() (*Config, error) {
 	config.CatEntryRepository = dbmodel.NewCatEntryRepository(databaseSession)
 	config.TreatmentEntryRepository = dbmodel.NewTreatmentEntryRepository(databaseSession)
 	config.VisitEntryRepository = dbmodel.NewVisitEntryRepository(databaseSession)
+	config.UserEntryRepository = dbmodel.NewUserEntryRepository(databaseSession)
 
 	return &config, nil
 }

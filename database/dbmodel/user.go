@@ -1,0 +1,88 @@
+package dbmodel
+
+import (
+	"gorm.io/gorm"
+)
+
+type UserEntry struct {
+	gorm.Model
+	Email    string `json:"user_email"`
+	Password string `json:"user_password"`
+}
+
+type UserEntryRepository interface {
+	Create(entry *UserEntry) (*UserEntry, error)
+	FindAll() ([]*UserEntry, error)
+	FindById(id int) (*UserEntry, error)
+	FindLastUserId(id int) bool
+	Update(id int, entry *UserEntry) (*UserEntry, error)
+	DeleteById(id int) error
+}
+
+type userEntryRepository struct {
+	db *gorm.DB
+}
+
+func NewUserEntryRepository(db *gorm.DB) UserEntryRepository {
+	return &userEntryRepository{db: db}
+}
+
+func (r *userEntryRepository) Create(entry *UserEntry) (*UserEntry, error) {
+
+	if err := r.db.Create(entry).Error; err != nil {
+		return nil, err
+	}
+
+	return entry, nil
+}
+
+func (r *userEntryRepository) FindAll() ([]*UserEntry, error) {
+
+	var entries []*UserEntry
+	if err := r.db.Find(&entries).Error; err != nil {
+		return nil, err
+	}
+
+	return entries, nil
+}
+
+func (r *userEntryRepository) FindById(id int) (*UserEntry, error) {
+
+	var entries *UserEntry
+	if err := r.db.Model(&UserEntry{}).First(&entries, id).Error; err != nil {
+		return nil, err
+	}
+
+	return entries, nil
+}
+
+func (r *userEntryRepository) FindLastUserId(id int) bool {
+
+	var count int64
+	r.db.Model(&UserEntry{}).Where("id = ?", id).Count(&count)
+
+	return count > 0
+}
+
+func (r *userEntryRepository) Update(id int, entry *UserEntry) (*UserEntry, error) {
+
+	if err := r.db.Model(&UserEntry{}).
+		Where("id = ?", id).
+		Updates(map[string]interface{}{
+			"email":    entry.Email,
+			"password": entry.Password,
+		}).Error; err != nil {
+		return nil, err
+	}
+
+	return entry, nil
+}
+
+func (r *userEntryRepository) DeleteById(id int) error {
+
+	if err := r.db.Delete(&UserEntry{}, id).Error; err != nil {
+		return err
+	}
+
+	return nil
+}
