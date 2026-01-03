@@ -43,17 +43,20 @@ func (config *UserConfig) LoginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Request the DB to Find the informations
 	user, err := config.UserEntryRepository.FindByEmail(*req.Email)
 	if err != nil || user == nil {
 		render.JSON(w, r, map[string]string{"error": "No user found with email : " + *req.Email})
 		return
 	}
 
+	// Check User password
 	if bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(*req.Password)) != nil {
 		http.Error(w, "Invalid email or password", http.StatusUnauthorized)
 		return
 	}
 
+	// Generate token for a specific user
 	token, err := authentication.GenerateToken(config.JWTSecret, user.Email)
 	if err != nil {
 		http.Error(w, "Failed to generate token", http.StatusInternalServerError)

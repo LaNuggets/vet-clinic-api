@@ -23,7 +23,6 @@ func Routes(configuration *config.Config) *chi.Mux {
 
 	router.Use(middleware.Logger)
 	router.Use(middleware.Recoverer)
-	// router.Use(authentication.AuthMiddleware("monkey"))
 
 	// Configuration of CORS middleware
 	router.Use(cors.Handler(cors.Options{
@@ -55,8 +54,6 @@ func Routes(configuration *config.Config) *chi.Mux {
 	router.Mount("/api/v1/vet/treatments", treatment.Routes(configuration))
 	router.Mount("/api/v1/vet/visits", visit.Routes(configuration))
 	router.Mount("/api/v1/vet/users", user.Routes(configuration))
-
-	// router.Mount("/api/v1/vet/login", authentication.Routes(configuration))
 
 	// Load static file for swagger
 	router.Handle("/docs/*", http.StripPrefix("/docs/", http.FileServer(http.Dir("./docs"))))

@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
-	"time"
 	"vet-clinic-api/config"
 	"vet-clinic-api/database/dbmodel"
 	"vet-clinic-api/pkg/model"
@@ -217,14 +216,6 @@ func (config *VisitConfig) UpdateHandler(w http.ResponseWriter, r *http.Request)
 		render.JSON(w, r, map[string]string{"error": "CatId not found in the DB"})
 		return
 	}
-
-	// Convert the date from string to time.Time
-	date, err := time.Parse("2006-01-02", *req.Date)
-	if err != nil {
-		fmt.Println("Error during date convertion")
-	}
-
-	fmt.Println(date)
 
 	// Convert the requested data into dbmodel.VisitEntry type for the "Update" function
 	visitEntry := &dbmodel.VisitEntry{CatId: *req.CatId, Date: *req.Date, Reason: *req.Reason, Vet: *req.Vet}
