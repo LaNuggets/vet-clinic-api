@@ -14,6 +14,7 @@ func Routes(configuration *config.Config) chi.Router {
 
 	// Routes definition
 	router.Post("/login", userConfig.LoginHandler)
+	router.Post("/refresh", userConfig.RefreshHandler)
 	router.Get("/{id}", userConfig.GetByIdHandler)
 	router.Get("/", userConfig.GetAllHandler)
 	router.Post("/", userConfig.PostHandler)

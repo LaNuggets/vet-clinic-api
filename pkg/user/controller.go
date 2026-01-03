@@ -56,15 +56,62 @@ func (config *UserConfig) LoginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Generate token for a specific user
-	token, err := authentication.GenerateToken(config.JWTSecret, user.Email)
+	// Generate access token for a specific user with 2 hours expiration time
+	accessToken, err := authentication.GenerateToken(config.JWTSecret, user.Email, 2)
+	if err != nil {
+		http.Error(w, "Failed to generate access token", http.StatusInternalServerError)
+		return
+	}
+
+	// Generate refresh token for a specific user with 7 days expiration time
+	refreshToken, err := authentication.GenerateToken(config.JWTRefreshSecret, user.Email, 7*24)
+	if err != nil {
+		http.Error(w, "Failed to generate refresh token", http.StatusInternalServerError)
+		return
+	}
+
+	// Set up token to specific response format for better readability
+	res := &model.TokensResponse{AccessToken: accessToken, RefreshToken: refreshToken}
+
+	render.JSON(w, r, res)
+}
+
+// RefreshHandler godoc
+// @Summary      Refresh access token
+// @Description  Generate a new access token using a valid refresh token
+// @Tags         auth
+// @Accept       json
+// @Produce      json
+// @Param        refresh body model.RefreshTokenRequest true "Refresh token payload"
+// @Success      200  {object}  model.AccessTokenResponse
+// @Failure      400  {object}  map[string]string "Invalid JSON payload"
+// @Failure      401  {object}  map[string]string "Invalid refresh token"
+// @Failure      500  {object}  map[string]string "Failed to generate token"
+// @Router       /users/refresh [post]
+func (config *UserConfig) RefreshHandler(w http.ResponseWriter, r *http.Request) {
+
+	// Get the request
+	req := &model.RefreshTokenRequest{}
+	if err := render.Bind(r, req); err != nil {
+		render.JSON(w, r, map[string]string{"error": "Invalid refresh token request payload. " + err.Error()})
+		return
+	}
+
+	// Check the refresh token validity
+	email, err := authentication.ParseToken(config.JWTRefreshSecret, *req.RefreshToken)
+	if err != nil {
+		http.Error(w, "Invalid refresh token", http.StatusUnauthorized)
+		return
+	}
+
+	// Generate new access token with 2 hours expiration time
+	newAccessToken, err := authentication.GenerateToken(config.JWTSecret, email, 2)
 	if err != nil {
 		http.Error(w, "Failed to generate token", http.StatusInternalServerError)
 		return
 	}
 
-	// Set up token to specific response format for better readability
-	res := &model.TokenResponse{Token: token}
+	res := &model.AccessTokenResponse{AccessToken: newAccessToken}
 
 	render.JSON(w, r, res)
 }

@@ -1,5 +1,10 @@
 basePath: /api/v1/vet
 definitions:
+  model.AccessTokenResponse:
+    properties:
+      access_token:
+        type: string
+    type: object
   model.CatHistoryResponse:
     properties:
       cat_age:
@@ -41,9 +46,16 @@ definitions:
       id:
         type: integer
     type: object
+  model.RefreshTokenRequest:
+    properties:
+      refresh_token:
+        type: string
+    type: object
   model.TokenResponse:
     properties:
-      token:
+      access_token:
+        type: string
+      refresh_token:
         type: string
     type: object
   model.TreatmentHistoryResponse:
@@ -723,6 +735,46 @@ paths:
               type: string
             type: object
       summary: Authenticate a user and get JWT
+      tags:
+      - auth
+  /users/refresh:
+    post:
+      consumes:
+      - application/json
+      description: Generate a new access token using a valid refresh token
+      parameters:
+      - description: Refresh token payload
+        in: body
+        name: refresh
+        required: true
+        schema:
+          $ref: '#/definitions/model.RefreshTokenRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.AccessTokenResponse'
+        "400":
+          description: Invalid JSON payload
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Invalid refresh token
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Failed to generate token
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Refresh access token
       tags:
       - auth
   /visits:

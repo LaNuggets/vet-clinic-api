@@ -8,11 +8,11 @@ import (
 )
 
 // Create token with specific email and expiration time
-func GenerateToken(secret, email string) (string, error) {
+func GenerateToken(secret, email string, duration int) (string, error) {
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"email": email,
-		"exp":   time.Now().Add(time.Hour * 2).Unix(),
+		"exp":   time.Now().Add(time.Hour * time.Duration(duration)).Unix(),
 	})
 
 	return token.SignedString([]byte(secret))

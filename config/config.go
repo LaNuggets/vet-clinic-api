@@ -11,8 +11,11 @@ import (
 
 type Config struct {
 
-	// Token secret
+	// Access token
 	JWTSecret string
+
+	// Refresh token
+	JWTRefreshSecret string
 
 	// Repository connection
 	CatEntryRepository       dbmodel.CatEntryRepository
@@ -32,6 +35,7 @@ func New() (*Config, error) {
 	}
 
 	config.JWTSecret = os.Getenv("JWT_SECRET")
+	config.JWTRefreshSecret = os.Getenv("JWT_REFRESH_SECRET")
 
 	// Models migrate
 	database.Migrate(databaseSession)
