@@ -8,6 +8,7 @@ type UserEntry struct {
 	gorm.Model
 	Email    string `json:"user_email"`
 	Password string `json:"user_password"`
+	Role     string `json:"user_role"`
 }
 
 type UserEntryRepository interface {
@@ -77,13 +78,20 @@ func (r *userEntryRepository) FindByEmail(email string) (*UserEntry, error) {
 
 func (r *userEntryRepository) Update(id int, entry *UserEntry) (*UserEntry, error) {
 
-	if err := r.db.Model(&UserEntry{}).
+	result := r.db.Model(&UserEntry{}).
 		Where("id = ?", id).
 		Updates(map[string]interface{}{
 			"email":    entry.Email,
 			"password": entry.Password,
-		}).Error; err != nil {
-		return nil, err
+		})
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	// Check if something has been update
+	if result.RowsAffected == 0 {
+		return nil, gorm.ErrRecordNotFound
 	}
 
 	return entry, nil

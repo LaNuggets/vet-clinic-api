@@ -10,6 +10,7 @@ require (
 	github.com/go-chi/cors v1.2.2
 	github.com/go-chi/render v1.0.3
 	github.com/golang-jwt/jwt v3.2.2+incompatible
+	github.com/joho/godotenv v1.5.1
 	github.com/swaggo/http-swagger v1.3.4
 	github.com/swaggo/swag v1.16.6
 	golang.org/x/crypto v0.44.0

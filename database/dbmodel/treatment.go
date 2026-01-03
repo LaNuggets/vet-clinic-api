@@ -68,13 +68,20 @@ func (r *treatmentEntryRepository) FindById(id int) (*TreatmentEntry, error) {
 
 func (r *treatmentEntryRepository) Update(id int, entry *TreatmentEntry) (*TreatmentEntry, error) {
 
-	if err := r.db.Model(&TreatmentEntry{}).
+	result := r.db.Model(&TreatmentEntry{}).
 		Where("id = ?", id).
 		Updates(map[string]interface{}{
 			"name":     entry.Name,
 			"visit_id": entry.VisitId,
-		}).Error; err != nil {
-		return nil, err
+		})
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	// Check if something has been update
+	if result.RowsAffected == 0 {
+		return nil, gorm.ErrRecordNotFound
 	}
 
 	return entry, nil

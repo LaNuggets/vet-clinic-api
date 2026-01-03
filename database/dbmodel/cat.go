@@ -86,15 +86,22 @@ func (r *catEntryRepository) FindLastCatId(id int) bool {
 
 func (r *catEntryRepository) Update(id int, entry *CatEntry) (*CatEntry, error) {
 
-	if err := r.db.Model(&CatEntry{}).
+	result := r.db.Model(&CatEntry{}).
 		Where("id = ?", id).
 		Updates(map[string]interface{}{
 			"name":   entry.Name,
 			"age":    entry.Age,
 			"breed":  entry.Breed,
 			"weight": entry.Weight,
-		}).Error; err != nil {
-		return nil, err
+		})
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	// Check if something has been update
+	if result.RowsAffected == 0 {
+		return nil, gorm.ErrRecordNotFound
 	}
 
 	return entry, nil

@@ -51,7 +51,7 @@ definitions:
       refresh_token:
         type: string
     type: object
-  model.TokenResponse:
+  model.TokensResponse:
     properties:
       access_token:
         type: string
@@ -81,11 +81,20 @@ definitions:
       treatment_visit_id:
         type: integer
     type: object
+  model.UserLoginRequest:
+    properties:
+      user_email:
+        type: string
+      user_password:
+        type: string
+    type: object
   model.UserRequest:
     properties:
       user_email:
         type: string
       user_password:
+        type: string
+      user_role:
         type: string
     type: object
   model.UserResponse:
@@ -94,7 +103,7 @@ definitions:
         type: integer
       user_email:
         type: string
-      user_password:
+      user_role:
         type: string
     type: object
   model.VisitHistoryResponse:
@@ -166,6 +175,8 @@ paths:
             additionalProperties:
               type: string
             type: object
+      security:
+      - BearerAuth: []
       summary: Get all Cats
       tags:
       - cats
@@ -199,6 +210,8 @@ paths:
             additionalProperties:
               type: string
             type: object
+      security:
+      - BearerAuth: []
       summary: Create a new Cat
       tags:
       - cats
@@ -232,6 +245,8 @@ paths:
             additionalProperties:
               type: string
             type: object
+      security:
+      - BearerAuth: []
       summary: Delete a cat
       tags:
       - cats
@@ -262,6 +277,8 @@ paths:
             additionalProperties:
               type: string
             type: object
+      security:
+      - BearerAuth: []
       summary: Get cat by ID
       tags:
       - cats
@@ -306,6 +323,8 @@ paths:
             additionalProperties:
               type: string
             type: object
+      security:
+      - BearerAuth: []
       summary: Update a cat
       tags:
       - cats
@@ -338,6 +357,8 @@ paths:
             additionalProperties:
               type: string
             type: object
+      security:
+      - BearerAuth: []
       summary: Get cat history
       tags:
       - cats
@@ -359,6 +380,8 @@ paths:
             additionalProperties:
               type: string
             type: object
+      security:
+      - BearerAuth: []
       summary: Get all treatments
       tags:
       - treatments
@@ -392,6 +415,8 @@ paths:
             additionalProperties:
               type: string
             type: object
+      security:
+      - BearerAuth: []
       summary: Create a new treatment
       tags:
       - treatments
@@ -425,6 +450,8 @@ paths:
             additionalProperties:
               type: string
             type: object
+      security:
+      - BearerAuth: []
       summary: Delete a treatment
       tags:
       - treatments
@@ -455,6 +482,8 @@ paths:
             additionalProperties:
               type: string
             type: object
+      security:
+      - BearerAuth: []
       summary: Get treatment by ID
       tags:
       - treatments
@@ -499,6 +528,8 @@ paths:
             additionalProperties:
               type: string
             type: object
+      security:
+      - BearerAuth: []
       summary: Update a treatment
       tags:
       - treatments
@@ -532,6 +563,8 @@ paths:
             additionalProperties:
               type: string
             type: object
+      security:
+      - BearerAuth: []
       summary: Get treatments by visit ID
       tags:
       - treatments
@@ -708,14 +741,14 @@ paths:
         name: login
         required: true
         schema:
-          $ref: '#/definitions/model.UserRequest'
+          $ref: '#/definitions/model.UserLoginRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/model.TokenResponse'
+            $ref: '#/definitions/model.TokensResponse'
         "400":
           description: Invalid JSON payload
           schema:
@@ -809,6 +842,8 @@ paths:
             additionalProperties:
               type: string
             type: object
+      security:
+      - BearerAuth: []
       summary: Get all visits with optional filters
       tags:
       - visits
@@ -842,6 +877,8 @@ paths:
             additionalProperties:
               type: string
             type: object
+      security:
+      - BearerAuth: []
       summary: Create a new visit
       tags:
       - visits
@@ -875,6 +912,8 @@ paths:
             additionalProperties:
               type: string
             type: object
+      security:
+      - BearerAuth: []
       summary: Delete a visit
       tags:
       - visits
@@ -906,6 +945,8 @@ paths:
             additionalProperties:
               type: string
             type: object
+      security:
+      - BearerAuth: []
       summary: Get visit by ID
       tags:
       - visits
@@ -950,9 +991,16 @@ paths:
             additionalProperties:
               type: string
             type: object
+      security:
+      - BearerAuth: []
       summary: Update a visit
       tags:
       - visits
 schemes:
 - http
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

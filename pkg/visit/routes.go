@@ -19,9 +19,13 @@ func Routes(configuration *config.Config) chi.Router {
 
 		router.Get("/", visitConfig.GetAlldHandler)
 		router.Get("/{id}", visitConfig.GetByIdHandler)
-		router.Post("/", visitConfig.PostHandler)
-		router.Put("/{id}", visitConfig.UpdateHandler)
-		router.Delete("/{id}", visitConfig.DeleteHandler)
+
+		// Routes protected by authentication and accessible by admin only
+		router.With(authentication.RoleMiddleware("admin")).Group(func(r chi.Router) {
+			r.Post("/", visitConfig.PostHandler)
+			r.Put("/{id}", visitConfig.UpdateHandler)
+			r.Delete("/{id}", visitConfig.DeleteHandler)
+		})
 	})
 
 	return router

@@ -15,6 +15,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/cors"
 	"github.com/go-chi/render"
+	"github.com/joho/godotenv"
 	httpSwagger "github.com/swaggo/http-swagger"
 )
 
@@ -69,7 +70,14 @@ func Routes(configuration *config.Config) *chi.Mux {
 // @host            localhost:8081
 // @BasePath        /api/v1/vet
 // @schemes         http
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
 func main() {
+	// Load .env file
+	if err := godotenv.Load(); err != nil {
+		log.Println("No .env file found")
+	}
 
 	// Init configuration
 	configuration, err := config.New()

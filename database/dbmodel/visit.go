@@ -117,7 +117,7 @@ func (r *visitEntryRepository) FindLastVisitId(id int) bool {
 
 func (r *visitEntryRepository) Update(id int, entry *VisitEntry) (*VisitEntry, error) {
 
-	if err := r.db.Model(&VisitEntry{}).
+	result := r.db.Model(&VisitEntry{}).
 		Preload("Treatments").
 		Where("id = ?", id).
 		Updates(map[string]interface{}{
@@ -125,8 +125,15 @@ func (r *visitEntryRepository) Update(id int, entry *VisitEntry) (*VisitEntry, e
 			"date":   entry.Date,
 			"reason": entry.Reason,
 			"vet":    entry.Vet,
-		}).Error; err != nil {
-		return nil, err
+		})
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	// Check if something has been update
+	if result.RowsAffected == 0 {
+		return nil, gorm.ErrRecordNotFound
 	}
 
 	return entry, nil

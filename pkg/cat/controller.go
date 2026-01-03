@@ -27,6 +27,7 @@ func New(configuration *config.Config) *CatConfig {
 // @Accept       json
 // @Produce      json
 // @Param        cat  body      model.CatRequest  true  "Cat creation payload"
+// @Security     BearerAuth
 // @Success      200  {object}  model.CatResponse
 // @Failure      400  {object}  map[string]string  "Invalid Cat Post request payload"
 // @Failure      500  {object}  map[string]string  "Failed to Create specific Cat"
@@ -70,6 +71,7 @@ func (config *CatConfig) PostHandler(w http.ResponseWriter, r *http.Request) {
 // @Description  Find all the cats in the database
 // @Tags         cats
 // @Produce      json
+// @Security     BearerAuth
 // @Success      200  {array}  model.CatResponse
 // @Failure      500  {object}  map[string]string  "Failed to retrieve cats"
 // @Router       /cats [get]
@@ -103,6 +105,7 @@ func (config *CatConfig) GetAllHandler(w http.ResponseWriter, r *http.Request) {
 // @Tags         cats
 // @Produce      json
 // @Param        id   path      int  true  "Cat ID"
+// @Security     BearerAuth
 // @Success      200  {object}  model.CatResponse
 // @Failure      404  {object}  map[string]string  "Cat not found"
 // @Failure      500  {object}  map[string]string  "Failed to find specific cat"
@@ -145,6 +148,7 @@ func (config *CatConfig) GetByIdHandler(w http.ResponseWriter, r *http.Request) 
 // @Tags         cats
 // @Produce      json
 // @Param        id   path      int  true  "Cat ID"
+// @Security     BearerAuth
 // @Success      200  {object}  model.CatHistoryResponse
 // @Failure      404  {object}  map[string]string  "Cat not found"
 // @Failure      500  {object}  map[string]string  "Failed to find cat history"
@@ -208,6 +212,7 @@ func (config *CatConfig) GetCatHistoryHandler(w http.ResponseWriter, r *http.Req
 // @Produce      json
 // @Param        id   path      int                 true  "Cat ID"
 // @Param        cat  body      model.CatRequest   true  "Cat update payload"
+// @Security     BearerAuth
 // @Success      200  {object}  model.CatResponse
 // @Failure      400  {object}  map[string]string  "Invalid request payload"
 // @Failure      404  {object}  map[string]string  "Cat not found"
@@ -265,6 +270,7 @@ func (config *CatConfig) UpdateHandler(w http.ResponseWriter, r *http.Request) {
 // @Tags         cats
 // @Produce      json
 // @Param        id   path      int  true  "Cat ID"
+// @Security     BearerAuth
 // @Success      200  {object}  map[string]string  "Cat deleted successfully"
 // @Failure      404  {object}  map[string]string  "Cat not found"
 // @Failure      500  {object}  map[string]string  "Failed to delete cat"

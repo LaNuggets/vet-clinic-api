@@ -28,8 +28,8 @@ func New(configuration *config.Config) *UserConfig {
 // @Tags         auth
 // @Accept       json
 // @Produce      json
-// @Param        login body model.UserRequest true "Login credentials"
-// @Success      200  {object}  model.TokenResponse
+// @Param        login body model.UserLoginRequest true "Login credentials"
+// @Success      200  {object}  model.TokensResponse
 // @Failure      400  {object}  map[string]string "Invalid JSON payload"
 // @Failure      401  {object}  map[string]string "Invalid email or password"
 // @Failure      500  {object}  map[string]string "Failed to generate token"
@@ -37,7 +37,7 @@ func New(configuration *config.Config) *UserConfig {
 func (config *UserConfig) LoginHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Get the request
-	req := &model.UserRequest{}
+	req := &model.UserLoginRequest{}
 	if err := render.Bind(r, req); err != nil {
 		render.JSON(w, r, map[string]string{"error": "Invalid User Post request payload. " + err.Error()})
 		return
@@ -57,14 +57,19 @@ func (config *UserConfig) LoginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Generate access token for a specific user with 2 hours expiration time
-	accessToken, err := authentication.GenerateToken(config.JWTSecret, user.Email, 2)
+	accessToken, err := authentication.GenerateToken(config.JWTSecret,
+		map[string]interface{}{
+			"email": user.Email,
+			"role":  user.Role},
+		2)
+
 	if err != nil {
 		http.Error(w, "Failed to generate access token", http.StatusInternalServerError)
 		return
 	}
 
 	// Generate refresh token for a specific user with 7 days expiration time
-	refreshToken, err := authentication.GenerateToken(config.JWTRefreshSecret, user.Email, 7*24)
+	refreshToken, err := authentication.GenerateToken(config.JWTRefreshSecret, map[string]interface{}{"email": user.Email}, 7*24)
 	if err != nil {
 		http.Error(w, "Failed to generate refresh token", http.StatusInternalServerError)
 		return
@@ -98,14 +103,32 @@ func (config *UserConfig) RefreshHandler(w http.ResponseWriter, r *http.Request)
 	}
 
 	// Check the refresh token validity
-	email, err := authentication.ParseToken(config.JWTRefreshSecret, *req.RefreshToken)
+	claims, err := authentication.ParseTokenClaims(config.JWTRefreshSecret, *req.RefreshToken)
 	if err != nil {
 		http.Error(w, "Invalid refresh token", http.StatusUnauthorized)
 		return
 	}
 
+	email, ok := claims["email"].(string)
+	if !ok || email == "" {
+		http.Error(w, "Email claim not found or invalid", http.StatusInternalServerError)
+		return
+	}
+
+	// Request the DB to Find the informations
+	user, err := config.UserEntryRepository.FindByEmail(email)
+	if err != nil || user == nil {
+		render.JSON(w, r, map[string]string{"error": "No user found with email : " + email})
+		return
+	}
+
 	// Generate new access token with 2 hours expiration time
-	newAccessToken, err := authentication.GenerateToken(config.JWTSecret, email, 2)
+	newAccessToken, err := authentication.GenerateToken(config.JWTSecret,
+		map[string]interface{}{
+			"email": user.Email,
+			"role":  user.Role},
+		2)
+
 	if err != nil {
 		http.Error(w, "Failed to generate token", http.StatusInternalServerError)
 		return
@@ -144,7 +167,11 @@ func (config *UserConfig) PostHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Convert the requested data into dbmodel.UserEntry type for the "Create" function
-	userEntry := &dbmodel.UserEntry{Email: *req.Email, Password: string(hashedPassword)}
+	userEntry := &dbmodel.UserEntry{
+		Email:    *req.Email,
+		Password: string(hashedPassword),
+		Role:     *req.Role,
+	}
 
 	// Request the DB to Create the informations
 	entries, err := config.UserEntryRepository.Create(userEntry)
@@ -155,9 +182,9 @@ func (config *UserConfig) PostHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Set up to a dediusered type for the response
 	res := &model.UserResponse{
-		Id:       entries.ID,
-		Email:    entries.Email,
-		Password: entries.Password}
+		Id:    entries.ID,
+		Email: entries.Email,
+		Role:  entries.Role}
 
 	render.JSON(w, r, res)
 }
@@ -184,9 +211,9 @@ func (config *UserConfig) GetAllHandler(w http.ResponseWriter, r *http.Request) 
 	for _, entrie := range entries {
 		result = append(result,
 			&model.UserResponse{
-				Id:       entrie.ID,
-				Email:    entrie.Email,
-				Password: entrie.Password})
+				Id:    entrie.ID,
+				Email: entrie.Email,
+				Role:  entrie.Role})
 	}
 
 	render.JSON(w, r, result)
@@ -225,9 +252,9 @@ func (config *UserConfig) GetByIdHandler(w http.ResponseWriter, r *http.Request)
 
 	// Set up to a dediusered type for the response
 	res := &model.UserResponse{
-		Id:       entries.ID,
-		Email:    entries.Email,
-		Password: entries.Password}
+		Id:    entries.ID,
+		Email: entries.Email,
+		Role:  entries.Role}
 
 	render.JSON(w, r, res)
 }
@@ -269,7 +296,9 @@ func (config *UserConfig) UpdateHandler(w http.ResponseWriter, r *http.Request) 
 	// Convert the requested data into dbmodel.UserEntry type for the "Update" function
 	userEntry := &dbmodel.UserEntry{
 		Email:    *req.Email,
-		Password: *req.Password}
+		Password: *req.Password,
+		Role:     *req.Role,
+	}
 
 	// Request the DB to Update the informations
 	entries, err := config.UserEntryRepository.Update(id, userEntry)
@@ -280,9 +309,9 @@ func (config *UserConfig) UpdateHandler(w http.ResponseWriter, r *http.Request) 
 
 	// Set up to a dediusered type for the response
 	res := &model.UserResponse{
-		Id:       uint(id),
-		Email:    entries.Email,
-		Password: entries.Password}
+		Id:    uint(id),
+		Email: entries.Email,
+		Role:  entries.Role}
 
 	render.JSON(w, r, res)
 }

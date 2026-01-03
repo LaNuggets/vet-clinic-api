@@ -27,6 +27,7 @@ func New(configuration *config.Config) *VisitConfig {
 // @Accept       json
 // @Produce      json
 // @Param        visit  body      model.VisitRequest  true  "Visit creation payload"
+// @Security     BearerAuth
 // @Success      200    {object}  model.VisitResponse
 // @Failure      400    {object}  map[string]string  "Invalid request payload"
 // @Failure      500    {object}  map[string]string  "Failed to create visit"
@@ -77,6 +78,7 @@ func (config *VisitConfig) PostHandler(w http.ResponseWriter, r *http.Request) {
 // @Param        vet     query     string  false  "Filter by veterinarian name"
 // @Param        reason  query     string  false  "Filter by visit reason"
 // @Param        date    query     string  false  "Filter by date (format: YYYY-MM-DD)"
+// @Security     BearerAuth
 // @Success      200     {array}   model.VisitHistoryResponse
 // @Failure      500     {object}  map[string]string  "Failed to retrieve visits"
 // @Router       /visits [get]
@@ -135,6 +137,7 @@ func (config *VisitConfig) GetAlldHandler(w http.ResponseWriter, r *http.Request
 // @Tags         visits
 // @Produce      json
 // @Param        id   path      int  true  "Visit ID"
+// @Security     BearerAuth
 // @Success      200  {object}  model.VisitHistoryResponse
 // @Failure      404  {object}  map[string]string  "Visit not found"
 // @Failure      500  {object}  map[string]string  "Failed to find specific visit"
@@ -185,6 +188,7 @@ func (config *VisitConfig) GetByIdHandler(w http.ResponseWriter, r *http.Request
 // @Produce      json
 // @Param        id     path      int                  true  "Visit ID"
 // @Param        visit  body      model.VisitRequest  true  "Visit update payload"
+// @Security     BearerAuth
 // @Success      200    {object}  model.VisitResponse
 // @Failure      400    {object}  map[string]string  "Invalid request payload"
 // @Failure      404    {object}  map[string]string  "Visit not found"
@@ -254,6 +258,7 @@ func (config *VisitConfig) UpdateHandler(w http.ResponseWriter, r *http.Request)
 // @Tags         visits
 // @Produce      json
 // @Param        id   path      int  true  "Visit ID"
+// @Security     BearerAuth
 // @Success      200  {object}  map[string]string  "Visit deleted successfully"
 // @Failure      404  {object}  map[string]string  "Visit not found"
 // @Failure      500  {object}  map[string]string  "Failed to delete visit"

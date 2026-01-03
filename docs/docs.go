@@ -17,6 +17,11 @@ const docTemplate = `{
     "paths": {
         "/cats": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Find all the cats in the database",
                 "produces": [
                     "application/json"
@@ -47,6 +52,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Creates a new cat entry in the database",
                 "consumes": [
                     "application/json"
@@ -99,6 +109,11 @@ const docTemplate = `{
         },
         "/cats/{id}": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Retrieves a specific cat from the database by its ID",
                 "produces": [
                     "application/json"
@@ -144,6 +159,11 @@ const docTemplate = `{
                 }
             },
             "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Updates an existing cat's information in the database",
                 "consumes": [
                     "application/json"
@@ -210,6 +230,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Deletes a cat from the database by its ID",
                 "produces": [
                     "application/json"
@@ -260,6 +285,11 @@ const docTemplate = `{
         },
         "/cats/{id}/history": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Retrieves the complete medical history of a cat including visits and treatments",
                 "produces": [
                     "application/json"
@@ -307,6 +337,11 @@ const docTemplate = `{
         },
         "/treatments": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Retrieves a list of all treatments from the database",
                 "produces": [
                     "application/json"
@@ -337,6 +372,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Creates a new treatment entry in the database",
                 "consumes": [
                     "application/json"
@@ -389,6 +429,11 @@ const docTemplate = `{
         },
         "/treatments/{id}": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Retrieves a specific treatment from the database by its ID",
                 "produces": [
                     "application/json"
@@ -434,6 +479,11 @@ const docTemplate = `{
                 }
             },
             "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Updates an existing treatment's information in the database",
                 "consumes": [
                     "application/json"
@@ -500,6 +550,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Deletes a treatment from the database by its ID",
                 "produces": [
                     "application/json"
@@ -550,6 +605,11 @@ const docTemplate = `{
         },
         "/treatments/{id}/history": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Retrieves all treatments associated with a specific visit",
                 "produces": [
                     "application/json"
@@ -700,7 +760,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.UserRequest"
+                            "$ref": "#/definitions/model.UserLoginRequest"
                         }
                     }
                 ],
@@ -708,7 +768,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/model.TokenResponse"
+                            "$ref": "#/definitions/model.TokensResponse"
                         }
                     },
                     "400": {
@@ -965,6 +1025,11 @@ const docTemplate = `{
         },
         "/visits": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Retrieves a list of all visits from the database, optionally filtered by vet, reason, or date",
                 "produces": [
                     "application/json"
@@ -1015,6 +1080,11 @@ const docTemplate = `{
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Creates a new visit entry in the database",
                 "consumes": [
                     "application/json"
@@ -1067,6 +1137,11 @@ const docTemplate = `{
         },
         "/visits/{id}": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Retrieves a specific visit from the database by its ID, including associated treatments",
                 "produces": [
                     "application/json"
@@ -1112,6 +1187,11 @@ const docTemplate = `{
                 }
             },
             "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Updates an existing visit's information in the database",
                 "consumes": [
                     "application/json"
@@ -1178,6 +1258,11 @@ const docTemplate = `{
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Deletes a visit from the database by its ID",
                 "produces": [
                     "application/json"
@@ -1307,7 +1392,7 @@ const docTemplate = `{
                 }
             }
         },
-        "model.TokenResponse": {
+        "model.TokensResponse": {
             "type": "object",
             "properties": {
                 "access_token": {
@@ -1354,6 +1439,17 @@ const docTemplate = `{
                 }
             }
         },
+        "model.UserLoginRequest": {
+            "type": "object",
+            "properties": {
+                "user_email": {
+                    "type": "string"
+                },
+                "user_password": {
+                    "type": "string"
+                }
+            }
+        },
         "model.UserRequest": {
             "type": "object",
             "properties": {
@@ -1361,6 +1457,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "user_password": {
+                    "type": "string"
+                },
+                "user_role": {
                     "type": "string"
                 }
             }
@@ -1374,7 +1473,7 @@ const docTemplate = `{
                 "user_email": {
                     "type": "string"
                 },
-                "user_password": {
+                "user_role": {
                     "type": "string"
                 }
             }
@@ -1444,6 +1543,13 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }`

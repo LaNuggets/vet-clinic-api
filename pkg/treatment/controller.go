@@ -27,6 +27,7 @@ func New(configuration *config.Config) *TreatmentConfig {
 // @Accept       json
 // @Produce      json
 // @Param        treatment  body      model.TreatmentRequest  true  "Treatment creation payload"
+// @Security     BearerAuth
 // @Success      200        {object}  model.TreatmentResponse
 // @Failure      400        {object}  map[string]string  "Invalid request payload"
 // @Failure      500        {object}  map[string]string  "Failed to create treatment"
@@ -67,6 +68,7 @@ func (config *TreatmentConfig) PostHandler(w http.ResponseWriter, r *http.Reques
 // @Description  Retrieves a list of all treatments from the database
 // @Tags         treatments
 // @Produce      json
+// @Security     BearerAuth
 // @Success      200  {array}   model.TreatmentResponse
 // @Failure      500  {object}  map[string]string  "Failed to retrieve treatments"
 // @Router       /treatments [get]
@@ -94,6 +96,7 @@ func (config *TreatmentConfig) GetAllHandler(w http.ResponseWriter, r *http.Requ
 // @Tags         treatments
 // @Produce      json
 // @Param        id   path      int  true  "Treatment ID"
+// @Security     BearerAuth
 // @Success      200  {object}  model.TreatmentResponse
 // @Failure      404  {object}  map[string]string  "Treatment not found"
 // @Failure      500  {object}  map[string]string  "Failed to find specific treatment"
@@ -131,6 +134,7 @@ func (config *TreatmentConfig) GetByIdHandler(w http.ResponseWriter, r *http.Req
 // @Tags         treatments
 // @Produce      json
 // @Param        id   path      int  true  "Visit ID"
+// @Security     BearerAuth
 // @Success      200  {array}   model.TreatmentHistoryResponse
 // @Failure      404  {object}  map[string]string  "Visit not found"
 // @Failure      500  {object}  map[string]string  "Failed to find treatments for visit"
@@ -174,6 +178,7 @@ func (config *TreatmentConfig) GetByVisitIdHandler(w http.ResponseWriter, r *htt
 // @Produce      json
 // @Param        id         path      int                      true  "Treatment ID"
 // @Param        treatment  body      model.TreatmentRequest  true  "Treatment update payload"
+// @Security     BearerAuth
 // @Success      200        {object}  model.TreatmentResponse
 // @Failure      400        {object}  map[string]string  "Invalid request payload"
 // @Failure      404        {object}  map[string]string  "Treatment not found"
@@ -228,6 +233,7 @@ func (config *TreatmentConfig) UpdateHandler(w http.ResponseWriter, r *http.Requ
 // @Tags         treatments
 // @Produce      json
 // @Param        id   path      int  true  "Treatment ID"
+// @Security     BearerAuth
 // @Success      200  {object}  map[string]string  "Treatment deleted successfully"
 // @Failure      404  {object}  map[string]string  "Treatment not found"
 // @Failure      500  {object}  map[string]string  "Failed to delete treatment"

@@ -1,34 +1,52 @@
 package authentication
 
 import (
+	"errors"
 	"strings"
 	"time"
 
 	"github.com/golang-jwt/jwt"
 )
 
-// Create token with specific email and expiration time
-func GenerateToken(secret, email string, duration int) (string, error) {
+// Create token with specific email, role and expiration time
+func GenerateToken(secret string, claims map[string]interface{}, duration time.Duration) (string, error) {
 
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"email": email,
-		"exp":   time.Now().Add(time.Hour * time.Duration(duration)).Unix(),
-	})
+	jwtClaims := jwt.MapClaims{}
 
+	for k, v := range claims {
+		jwtClaims[k] = v
+	}
+
+	jwtClaims["exp"] = time.Now().Add(time.Hour * duration).Unix()
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwtClaims)
 	return token.SignedString([]byte(secret))
 }
 
-// Check token signature and validity, return email
-func ParseToken(secret, tokenString string) (string, error) {
-
+// Check token signature and validity return claims
+func ParseTokenClaims(secret, tokenString string) (jwt.MapClaims, error) {
 	tokenString = strings.TrimPrefix(tokenString, "Bearer ")
-	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-		return []byte(secret), nil
-	})
 
-	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		return claims["email"].(string), nil
+	claims := jwt.MapClaims{}
+
+	token, err := jwt.ParseWithClaims(
+		tokenString,
+		claims,
+		func(token *jwt.Token) (interface{}, error) {
+			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+				return nil, errors.New("unexpected signing method")
+			}
+			return []byte(secret), nil
+		},
+	)
+
+	if err != nil {
+		return nil, err
 	}
 
-	return "", err
+	if !token.Valid {
+		return nil, errors.New("invalid token")
+	}
+
+	return claims, nil
 }
