@@ -6,6 +6,7 @@ import (
 	"vet-clinic-api/config"
 	"vet-clinic-api/pkg/cat"
 	"vet-clinic-api/pkg/treatment"
+	"vet-clinic-api/pkg/user"
 	"vet-clinic-api/pkg/visit"
 
 	_ "vet-clinic-api/docs"
@@ -52,6 +53,7 @@ func Routes(configuration *config.Config) *chi.Mux {
 	router.Mount("/api/v1/vet/cats", cat.Routes(configuration))
 	router.Mount("/api/v1/vet/treatments", treatment.Routes(configuration))
 	router.Mount("/api/v1/vet/visits", visit.Routes(configuration))
+	router.Mount("/api/v1/vet/users", user.Routes(configuration))
 
 	// Load static file for swagger
 	router.Handle("/docs/*", http.StripPrefix("/docs/", http.FileServer(http.Dir("./docs"))))
