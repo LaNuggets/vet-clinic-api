@@ -109,7 +109,7 @@ Réponse
 }
 ```
 
-Les tokens sont indispansable pour faire des requetes sur toutes les routes de l'API à l'exception de routes "Users". C'est une sécurité supplémentaire.
+Les tokens sont indispansable pour faire des requetes sur toutes les routes de l'API à l'exception des routes "Users". C'est une sécurité supplémentaire.
 
 #### Recevoir un nouvelle access token
 - **POST** `/users/refresh` (admin only)
