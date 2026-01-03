@@ -112,3 +112,8 @@ Supprime un Traitement
     ├──── main.go
     └──── README.md
 ```
+
+
+## Amélioration
+
+Ajout de l'authentification avec JWT

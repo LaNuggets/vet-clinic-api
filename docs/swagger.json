@@ -4,8 +4,8 @@
     ],
     "swagger": "2.0",
     "info": {
-        "description": "Description de mon API",
-        "title": "Mon API",
+        "description": "This is an API for managing a veterinary clinic. You can register cats, consultations and treatments.",
+        "title": "Veterinarian API",
         "contact": {},
         "version": "1.0"
     },
@@ -28,12 +28,12 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.CatResponse"
+                                "$ref": "#/definitions/model.CatResponse"
                             }
                         }
                     },
                     "500": {
-                        "description": "Invalid to retrieve cats",
+                        "description": "Failed to retrieve cats",
                         "schema": {
                             "type": "object",
                             "additionalProperties": {
@@ -62,7 +62,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.CatRequest"
+                            "$ref": "#/definitions/model.CatRequest"
                         }
                     }
                 ],
@@ -70,7 +70,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.CatResponse"
+                            "$ref": "#/definitions/model.CatResponse"
                         }
                     },
                     "400": {
@@ -117,7 +117,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.CatResponse"
+                            "$ref": "#/definitions/model.CatResponse"
                         }
                     },
                     "404": {
@@ -166,7 +166,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.CatRequest"
+                            "$ref": "#/definitions/model.CatRequest"
                         }
                     }
                 ],
@@ -174,7 +174,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.CatResponse"
+                            "$ref": "#/definitions/model.CatResponse"
                         }
                     },
                     "400": {
@@ -278,7 +278,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.CatHistoryResponse"
+                            "$ref": "#/definitions/model.CatHistoryResponse"
                         }
                     },
                     "404": {
@@ -318,7 +318,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.TreatmentResponse"
+                                "$ref": "#/definitions/model.TreatmentResponse"
                             }
                         }
                     },
@@ -352,7 +352,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.TreatmentRequest"
+                            "$ref": "#/definitions/model.TreatmentRequest"
                         }
                     }
                 ],
@@ -360,7 +360,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.TreatmentResponse"
+                            "$ref": "#/definitions/model.TreatmentResponse"
                         }
                     },
                     "400": {
@@ -407,7 +407,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.TreatmentResponse"
+                            "$ref": "#/definitions/model.TreatmentResponse"
                         }
                     },
                     "404": {
@@ -456,7 +456,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.TreatmentRequest"
+                            "$ref": "#/definitions/model.TreatmentRequest"
                         }
                     }
                 ],
@@ -464,7 +464,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.TreatmentResponse"
+                            "$ref": "#/definitions/model.TreatmentResponse"
                         }
                     },
                     "400": {
@@ -570,7 +570,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.TreatmentHistoryResponse"
+                                "$ref": "#/definitions/model.TreatmentHistoryResponse"
                             }
                         }
                     },
@@ -631,7 +631,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.VisitHistoryResponse"
+                                "$ref": "#/definitions/model.VisitHistoryResponse"
                             }
                         }
                     },
@@ -665,7 +665,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.VisitRequest"
+                            "$ref": "#/definitions/model.VisitRequest"
                         }
                     }
                 ],
@@ -673,7 +673,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.VisitResponse"
+                            "$ref": "#/definitions/model.VisitResponse"
                         }
                     },
                     "400": {
@@ -720,7 +720,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.VisitHistoryResponse"
+                            "$ref": "#/definitions/model.VisitHistoryResponse"
                         }
                     },
                     "404": {
@@ -769,7 +769,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.VisitRequest"
+                            "$ref": "#/definitions/model.VisitRequest"
                         }
                     }
                 ],
@@ -777,7 +777,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.VisitResponse"
+                            "$ref": "#/definitions/model.VisitResponse"
                         }
                     },
                     "400": {
@@ -860,7 +860,7 @@
         }
     },
     "definitions": {
-        "models.CatHistoryResponse": {
+        "model.CatHistoryResponse": {
             "type": "object",
             "properties": {
                 "cat_age": {
@@ -875,7 +875,7 @@
                 "cat_visits": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/models.VisitHistoryResponse"
+                        "$ref": "#/definitions/model.VisitHistoryResponse"
                     }
                 },
                 "cat_weight": {
@@ -886,7 +886,7 @@
                 }
             }
         },
-        "models.CatRequest": {
+        "model.CatRequest": {
             "type": "object",
             "properties": {
                 "cat_age": {
@@ -903,7 +903,7 @@
                 }
             }
         },
-        "models.CatResponse": {
+        "model.CatResponse": {
             "type": "object",
             "properties": {
                 "cat_age": {
@@ -923,7 +923,7 @@
                 }
             }
         },
-        "models.TreatmentHistoryResponse": {
+        "model.TreatmentHistoryResponse": {
             "type": "object",
             "properties": {
                 "id": {
@@ -934,7 +934,7 @@
                 }
             }
         },
-        "models.TreatmentRequest": {
+        "model.TreatmentRequest": {
             "type": "object",
             "properties": {
                 "treatment_name": {
@@ -945,7 +945,7 @@
                 }
             }
         },
-        "models.TreatmentResponse": {
+        "model.TreatmentResponse": {
             "type": "object",
             "properties": {
                 "id": {
@@ -959,7 +959,7 @@
                 }
             }
         },
-        "models.VisitHistoryResponse": {
+        "model.VisitHistoryResponse": {
             "type": "object",
             "properties": {
                 "id": {
@@ -974,7 +974,7 @@
                 "visit_treatments": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/models.TreatmentHistoryResponse"
+                        "$ref": "#/definitions/model.TreatmentHistoryResponse"
                     }
                 },
                 "visit_vet": {
@@ -982,7 +982,7 @@
                 }
             }
         },
-        "models.VisitRequest": {
+        "model.VisitRequest": {
             "type": "object",
             "properties": {
                 "visit_cat_id": {
@@ -999,7 +999,7 @@
                 }
             }
         },
-        "models.VisitResponse": {
+        "model.VisitResponse": {
             "type": "object",
             "properties": {
                 "id": {
@@ -1017,7 +1017,7 @@
                 "visit_treatments": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/models.TreatmentResponse"
+                        "$ref": "#/definitions/model.TreatmentResponse"
                     }
                 },
                 "visit_vet": {
